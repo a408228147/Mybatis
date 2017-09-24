@@ -20,6 +20,6 @@
 
     <!-- 加载映射文件 -->
     <mappers>
-        <mapper resource=" User.xml " />
+        <mapper resource ="User.xml" />
     </mappers>
 </configuration>
