@@ -30,6 +30,5 @@ public class MybatisFirst {
         System.out.println(user);
     //  关闭资源
         sqlSession.close();
-    }
-
+    }//1212
 }
