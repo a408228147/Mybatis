@@ -14,4 +14,35 @@
             resultType="com.itheima.mybatis.po.User">
         SELECT * FROM USER WHERE id =#{id}
     </select>
+
+    <!--根据用户名称模糊查询用户列表 -->
+    <!-- ${ } :表示一个sql的连接符 -->
+    <!-- ${value} 里面的value 表示输入的参数名称，如果参数是简单类型，那么${ } 里面的参数名称必须是value -->
+    <!-- ${ } 存在sql注入的风险，所以要慎用！ 但是在一些场景下，必须使用${ }，比如排序，动态传入排序的列名，${ }会原样输出，不加解释 -->
+    <select id="findUserByName" parameterType="java.lang.String" resultType="com.itheima.mybatis.po.User" >
+        SELECT * from user WHERE username LIKE  '%${value}%'
+    </select>
+
+    <!-- 添加用户 -->
+    <!-- selectKey 查询主键 在标签内需要输入查询主键的sql -->
+   <!--   SELECT  LAST_INSERT_ID() 是Mysql的函数 获取自增主键ID 他必须配合insert语句一起使用 -->
+    <insert id="insertUser" parameterType="com.itheima.mybatis.po.User" >
+<selectKey  keyProperty="id"  resultType="int" order="AFTER">
+    SELECT  LAST_INSERT_ID()
+
+</selectKey>
+        <!-- 通过OGNL去User对象中查找对应的属性名称 -->
+        insert into user (username,sex) values (#{username},#{sex})
+    </insert>
+
+    <!-- mysql   自增主键UUID-->
+    <insert id="insertUser" parameterType="com.itheima.mybatis.po.User" >
+        <selectKey  keyProperty="id"  resultType="int" order="BEFORE">
+            SELECT  UUID()
+          /*order 只要不是自增主键 order都设置为before*/
+        </selectKey>
+        <!-- 通过OGNL去User对象中查找对应的属性名称 -->
+        insert into user (id,username,sex) values (#{id},#{username},#{sex})
+        /*需要显式的给id赋值，因为该id不是通过自增主键来创建的*/
+    </insert>
 </mapper>
